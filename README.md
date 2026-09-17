@@ -110,25 +110,30 @@ Use `get_reference_data` to discover valid field enum values.
 
 ## Publishing
 
-### npm
+Both npm and the MCP Registry publish via **OIDC — no long-lived tokens are stored in this repo.**
 
-```bash
-npm run build
-npm publish --access public
-```
+### npm (Trusted Publishing / OIDC)
+
+Automated publishing uses [npm Trusted Publishing](https://docs.npmjs.com/trusted-publishers/): GitHub Actions authenticates to npm over short-lived OIDC and provenance is generated automatically — no `NPM_TOKEN`.
+
+One-time setup on npmjs.com (after the first version exists — see bootstrapping below): package **Settings → Trusted Publisher → GitHub Actions**, set:
+
+| Field | Value |
+|-------|-------|
+| Organization / user | `luarss` |
+| Repository | `alternativespe-mcp` |
+| Workflow filename | `publish-mcp-registry.yml` |
+| Environment | `release` |
+
+**Bootstrapping:** a trusted publisher can only be configured once the package already exists, so the very first version must be published manually — `npm publish --access public` locally — then configure the trusted publisher for all subsequent releases.
 
 ### MCP Registry
 
-This repo publishes its `server.json` to the [official MCP Registry](https://registry.modelcontextprotocol.io) using GitHub OIDC auth.
+`server.json` is published to the [official MCP Registry](https://registry.modelcontextprotocol.io) via the [`mcp-publisher`](https://github.com/modelcontextprotocol/registry) CLI using GitHub OIDC (`mcp-publisher login github-oidc`) — also tokenless.
 
-- Manual publish, using the [`mcp-publisher`](https://github.com/modelcontextprotocol/registry) CLI:
+### Automated release
 
-  ```bash
-  mcp-publisher login github
-  mcp-publisher publish
-  ```
-
-- Automated publish: pushing a `v*` tag (e.g. `git tag v0.1.0 && git push origin v0.1.0`) triggers [`.github/workflows/publish-mcp-registry.yml`](.github/workflows/publish-mcp-registry.yml), which publishes the npm package, then syncs `server.json`'s version to the tag and publishes it to the registry via `mcp-publisher` with GitHub OIDC (no stored secret required beyond `NPM_TOKEN` for npm).
+Pushing a `v*` tag (e.g. `git tag v0.1.0 && git push origin v0.1.0`) triggers [`.github/workflows/publish-mcp-registry.yml`](.github/workflows/publish-mcp-registry.yml). The job runs in the protected **`release`** GitHub environment (required reviewer + `v*`-tags-only), so a publish waits for manual approval, then publishes to npm (OIDC) and syncs `server.json`'s version to the tag before publishing it to the registry (OIDC).
 
 ## License
 
