@@ -108,6 +108,28 @@ Use `get_reference_data` to discover valid field enum values.
 | `ALTDMP_API_KEY` | yes | — | Your Alternatives Partner API key |
 | `ALTDMP_BASE_URL` | no | `https://api.altdmp.io/v3` | API base URL override |
 
+## Publishing
+
+### npm
+
+```bash
+npm run build
+npm publish --access public
+```
+
+### MCP Registry
+
+This repo publishes its `server.json` to the [official MCP Registry](https://registry.modelcontextprotocol.io) using GitHub OIDC auth.
+
+- Manual publish, using the [`mcp-publisher`](https://github.com/modelcontextprotocol/registry) CLI:
+
+  ```bash
+  mcp-publisher login github
+  mcp-publisher publish
+  ```
+
+- Automated publish: pushing a `v*` tag (e.g. `git tag v0.1.0 && git push origin v0.1.0`) triggers [`.github/workflows/publish-mcp-registry.yml`](.github/workflows/publish-mcp-registry.yml), which publishes the npm package, then syncs `server.json`'s version to the tag and publishes it to the registry via `mcp-publisher` with GitHub OIDC (no stored secret required beyond `NPM_TOKEN` for npm).
+
 ## License
 
 MIT

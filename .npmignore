@@ -1,0 +1,11 @@
+src/
+tsconfig.json
+server.json
+.env
+.env.*
+node_modules/
+*.log
+.github/
+*.test.ts
+*.tsbuildinfo
+.DS_Store

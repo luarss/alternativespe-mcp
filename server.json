@@ -1,0 +1,34 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.luarss/alternativespe-mcp",
+  "description": "Private-market data across Southeast Asia via the Alternatives Partner API v3",
+  "repository": {
+    "url": "https://github.com/luarss/alternativespe-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "alternativespe-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ALTDMP_API_KEY",
+          "description": "Your Alternatives Partner API key (obtain from support@alternatives.pe)",
+          "isRequired": true,
+          "isSecret": true
+        },
+        {
+          "name": "ALTDMP_BASE_URL",
+          "description": "Override the API base URL (default: https://api.altdmp.io/v3)",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}
