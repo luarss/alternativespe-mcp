@@ -1,0 +1,33 @@
+{
+  "name": "alternativespe-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for the Alternatives Partner API v3 (altdmp.io) — private-market data across Southeast Asia",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "alternativespe-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.20.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}
