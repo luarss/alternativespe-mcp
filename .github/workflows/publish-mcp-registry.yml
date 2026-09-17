@@ -45,11 +45,35 @@ jobs:
 
       # No NODE_AUTH_TOKEN: auth is via short-lived OIDC (id-token: write above)
       # against the trusted publisher configured on npmjs.com. Provenance is
-      # generated automatically.
+      # generated automatically. Idempotent so the job can be safely re-run:
+      # if the version is already on npm, skip instead of failing.
       - name: Publish package to npm (trusted publishing)
-        run: npm publish --access public
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "alternativespe-mcp@${VERSION}" version >/dev/null 2>&1; then
+            echo "alternativespe-mcp@${VERSION} is already on npm — skipping publish."
+          else
+            npm publish --access public
+          fi
 
       ### Publish server.json to the MCP Registry
+
+      # npm processes publishes asynchronously (a new version can take several
+      # minutes to become readable). The MCP Registry validates that the npm
+      # version exists, so wait for it to go live before registering.
+      - name: Wait for npm version to be live
+        run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
+          for i in $(seq 1 30); do
+            if npm view "alternativespe-mcp@${VERSION}" version >/dev/null 2>&1; then
+              echo "alternativespe-mcp@${VERSION} is live on npm."
+              exit 0
+            fi
+            echo "Waiting for npm to process ${VERSION} (attempt ${i}/30)..."
+            sleep 20
+          done
+          echo "Timed out waiting for npm to publish ${VERSION}." >&2
+          exit 1
 
       - name: Install mcp-publisher
         run: |
