@@ -137,4 +137,4 @@ Pushing a `v*` tag (e.g. `git tag v0.1.0 && git push origin v0.1.0`) triggers [`
 
 ## License
 
-MIT
+[WTFPL](LICENSE)

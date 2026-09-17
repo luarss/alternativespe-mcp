@@ -2,7 +2,7 @@
   "name": "alternativespe-mcp",
   "version": "0.1.1",
   "description": "MCP server for the Alternatives Partner API v3 (altdmp.io) — private-market data across Southeast Asia",
-  "license": "MIT",
+  "license": "WTFPL",
   "type": "module",
   "mcpName": "io.github.luarss/alternativespe-mcp",
   "author": "luarss",
